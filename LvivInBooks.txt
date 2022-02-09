@@ -1,0 +1,60 @@
+create database LvivInBooks
+
+go
+
+use LvivInBooks
+
+go
+
+create table BOOKS
+	(
+	ID int identity (1,1) Primary key,
+	Title nvarchar(500), 
+	PubHouse nvarchar(200),
+	Language nvarchar(200),
+	Annotation nvarchar(max)
+	)
+
+	go
+
+create table AUTHORS
+	(
+	ID int identity (1,1) Primary key,
+	FirstName nvarchar(50), 
+	LastName nvarchar(50) 
+
+	)
+
+	go
+
+create table GENRES
+	(
+	ID int identity (1,1) Primary key,
+	Name nvarchar(100) 
+	)
+
+	go
+
+create table AUTHORS_BOOKS
+	(
+	ID int identity (1,1) Primary key,
+	ARef int Foreign key references Authors(ID),
+	BRef int Foreign key references Books(ID)
+	)
+
+go
+	
+create table GENRES_BOOKS
+	(
+	ID int identity (1,1) Primary key,
+	GRef int Foreign key references Genre(ID),
+	BRef int Foreign key references Books(ID)
+	)
+
+	go 
+
+
+
+
+
+
