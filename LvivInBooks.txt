@@ -54,6 +54,32 @@ create table GENRES_BOOKS
 	go 
 
 
+ALTER TABLE BOOKS
+ALTER COLUMN Title nvarchar(100) NOT NULL; 
+
+ALTER TABLE AUTHORS
+ADD Nationality nvarchar (20);
+
+ALTER TABLE AUTHORS
+ADD CONSTRAINT Nationality 
+DEFAULT 'Ukrainian' FOR Nationality;
+
+ALTER TABLE AUTHORS   
+   ADD CONSTRAINT CHK_FirstName_AUTHORS   
+   CHECK (FirstName LIKE '_%');  
+GO 
+                      
+ALTER TABLE AUTHORS   
+   ADD CONSTRAINT CHK_LastName_AUTHORS   
+   CHECK (LastName LIKE '_%' and LastName LIKE N'%[A-ß, à-ÿ,ª,º,¯,¿,²,³,'']');  
+GO
+
+ALTER TABLE GENRES
+ADD UNIQUE (Name);
+
+
+
+
 
 
 
