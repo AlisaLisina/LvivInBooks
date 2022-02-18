@@ -77,7 +77,96 @@ GO
 ALTER TABLE GENRES
 ADD UNIQUE (Name);
 
+CREATE VIEW view_Love 
+AS 
+SELECT * FROM BOOKS
+WHERE Annotation LIKE N'%кохання%';
 
+SELECT * FROM view_Love
+--
+/*CREATE VIEW view_PopularAuthors -- вибирає найпродуктивнішого автора (х3 )
+AS 
+SELECT TOP 3 WITH TIES *
+FROM AUTHORS 
+WHERE AUTHORS.ID IN (
+                     SELECT TOP 3 WITH TIES ARef
+                     FROM AUTHORS_BOOKS
+                     GROUP BY ARef
+                     ORDER BY COUNT(BRef) DESC)
+ORDER BY AUTHORS.LastName;
+
+SELECT * FROM view_PopularAuthors*/
+--
+CREATE VIEW view_length -- вибирає аннотацію до 100 символів
+AS
+  SELECT Title, LEN(Annotation) as length
+  FROM BOOKS
+  WHERE LEN(Annotation) <=100;
+
+SELECT * FROM view_length
+-----------------------------CLUSTERED|NONCLUSTERED----------------------------------------------
+CREATE VIEW v_clustered WITH SCHEMABINDING  
+AS
+  SELECT ID, Title, PubHouse, Language, Annotation
+  FROM dbo.BOOKS
+  WHERE Annotation LIKE N'%Львів%'
+
+CREATE UNIQUE CLUSTERED INDEX books_indexed
+ON v_clustered
+             (Title,
+              PubHouse
+                      );
+CREATE NONCLUSTERED INDEX books_nonclustered
+ON v_clustered
+              (ID,
+              Language
+              );
+
+--------------------------------STORED PROCEDURES-----------------------------------------
+CREATE PROC spTopAuthors --виклик 3 авторів з найбільшою кількістю книжок
+AS 
+  SELECT TOP 3 WITH TIES *
+  FROM AUTHORS 
+  WHERE AUTHORS.ID IN (
+                       SELECT TOP 3 WITH TIES ARef
+                       FROM AUTHORS_BOOKS
+                       GROUP BY ARef
+                       ORDER BY COUNT(BRef) DESC)
+  ORDER BY AUTHORS.LastName;
+GO
+
+EXEC spTopAuthors;
+
+/*CREATE PROC spNewAuthor
+@FirstName nvarchar (50),
+@LastName nvarchar (50)
+AS
+  IF EXIST (SELECT FirstName, LastName 
+            FROM AUTHORS
+            WHERE FirstName = @FirstName
+              AND   LastName = @LastName)
+            PRINT N'Такий автор вже є'
+  ELSE 
+  BEGIN 
+   INSERT INTO AUTHORS
+   VALUES (@FirstName, @LastName)
+   PRINT N'Автор успішно доданий до бази'
+  END*/
+
+CREATE PROC dbo.spNewAuthor
+@FirstName nvarchar (50),
+@LastName nvarchar (50)
+AS
+
+BEGIN 
+          
+     INSERT INTO AUTHORS (FirstName, LastName)
+     VALUES (@FirstName, @LastName)
+END
+
+EXEC dbo.spNewAuthor
+     @FirstName = 'Аліса',
+     @LastName = 'Лісіна'
 
 
 
