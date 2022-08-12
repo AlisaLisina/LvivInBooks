@@ -1,4 +1,4 @@
-create database LvivInBooks
+create database LvivInBooks -- creating a database for my possible project for university 
 
 go
 
@@ -55,14 +55,14 @@ create table GENRES_BOOKS
 
 
 ALTER TABLE BOOKS
-ALTER COLUMN Title nvarchar(100) NOT NULL; 
+ALTER COLUMN Title nvarchar(100) NOT NULL; -
 
 ALTER TABLE AUTHORS
 ADD Nationality nvarchar (20);
 
 ALTER TABLE AUTHORS
 ADD CONSTRAINT Nationality 
-DEFAULT 'Ukrainian' FOR Nationality;
+DEFAULT 'Ukrainian' FOR Nationality; -- studing constraints topic
 
 ALTER TABLE AUTHORS   
    ADD CONSTRAINT CHK_FirstName_AUTHORS   
@@ -71,7 +71,7 @@ GO
                       
 ALTER TABLE AUTHORS   
    ADD CONSTRAINT CHK_LastName_AUTHORS   
-   CHECK (LastName LIKE '_%' and LastName LIKE N'%[A-Я, а-я,Є,є,Ї,ї,І,і,'']');  
+   CHECK (LastName LIKE '_%' and LastName LIKE N'%[A-Гџ, Г -Гї,ВЄ,Вє,ВЇ,Вї,ВІ,Ві,'']');  -- making a constraint, where user can add only cyrillic symbols + ukrainian specific letters, such as 'С—, С”, С–' 
 GO
 
 ALTER TABLE GENRES
@@ -80,11 +80,11 @@ ADD UNIQUE (Name);
 CREATE VIEW view_Love 
 AS 
 SELECT * FROM BOOKS
-WHERE Annotation LIKE N'%кохання%';
+WHERE Annotation LIKE N'%ГЄГ®ГµГ Г­Г­Гї%';
 
 SELECT * FROM view_Love
 --
-/*CREATE VIEW view_PopularAuthors -- вибирає найпродуктивнішого автора (х3 )
+/*CREATE VIEW view_PopularAuthors -- ГўГЁГЎГЁГ°Г Вє Г­Г Г©ГЇГ°Г®Г¤ГіГЄГІГЁГўГ­ВіГёГ®ГЈГ® Г ГўГІГ®Г°Г  (Гµ3 )
 AS 
 SELECT TOP 3 WITH TIES *
 FROM AUTHORS 
@@ -93,11 +93,11 @@ WHERE AUTHORS.ID IN (
                      FROM AUTHORS_BOOKS
                      GROUP BY ARef
                      ORDER BY COUNT(BRef) DESC)
-ORDER BY AUTHORS.LastName;
+ORDER BY AUTHORS.LastName; 					-- creating a view, which shows a 'top 3' most productive authors
 
 SELECT * FROM view_PopularAuthors*/
 --
-CREATE VIEW view_length -- вибирає аннотацію до 100 символів
+CREATE VIEW view_length -- ГўГЁГЎГЁГ°Г Вє Г Г­Г­Г®ГІГ Г¶ВіГѕ Г¤Г® 100 Г±ГЁГ¬ГўГ®Г«ВіГў
 AS
   SELECT Title, LEN(Annotation) as length
   FROM BOOKS
@@ -109,7 +109,7 @@ CREATE VIEW v_clustered WITH SCHEMABINDING
 AS
   SELECT ID, Title, PubHouse, Language, Annotation
   FROM dbo.BOOKS
-  WHERE Annotation LIKE N'%Львів%'
+  WHERE Annotation LIKE N'%Г‹ГјГўВіГў%'
 
 CREATE UNIQUE CLUSTERED INDEX books_indexed
 ON v_clustered
@@ -123,7 +123,7 @@ ON v_clustered
               );
 
 --------------------------------STORED PROCEDURES-----------------------------------------
-CREATE PROC spTopAuthors --виклик 3 авторів з найбільшою кількістю книжок
+CREATE PROC spTopAuthors 
 AS 
   SELECT TOP 3 WITH TIES *
   FROM AUTHORS 
@@ -145,14 +145,14 @@ AS
             FROM AUTHORS
             WHERE FirstName = @FirstName
               AND   LastName = @LastName)
-            PRINT N'Такий автор вже є'
+            PRINT N'Г’Г ГЄГЁГ© Г ГўГІГ®Г° ГўГ¦ГҐ Вє'
   ELSE 
   BEGIN 
    INSERT INTO AUTHORS
    VALUES (@FirstName, @LastName)
-   PRINT N'Автор успішно доданий до бази'
+   PRINT N'ГЂГўГІГ®Г° ГіГ±ГЇВіГёГ­Г® Г¤Г®Г¤Г Г­ГЁГ© Г¤Г® ГЎГ Г§ГЁ'
   END*/
-
+						-- a procedure, which insert data about author and if it already exists - then shows 'this author already exists'
 CREATE PROC dbo.spNewAuthor
 @FirstName nvarchar (50),
 @LastName nvarchar (50)
@@ -165,8 +165,8 @@ BEGIN
 END
 
 EXEC dbo.spNewAuthor
-     @FirstName = 'Аліса',
-     @LastName = 'Лісіна'
+     @FirstName = 'ГЂГ«ВіГ±Г ', 			-- checking code for problems 
+     @LastName = 'Г‹ВіГ±ВіГ­Г '
 
 
 
