@@ -1,2 +1,1 @@
-- about project 
-- for what purpose 
+Database structure for SoftServe Database Camp. 
