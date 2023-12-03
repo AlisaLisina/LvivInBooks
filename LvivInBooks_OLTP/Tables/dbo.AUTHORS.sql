@@ -1,0 +1,37 @@
+USE [LvivInBooks_OLTP]
+GO
+
+/****** Object:  Table [dbo].[AUTHORS]    Script Date: 03.12.2023 16:01:20 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[AUTHORS](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](50) NULL,
+	[LastName] [nvarchar](50) NULL,
+	[Nationality] [nvarchar](20) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[AUTHORS] ADD  CONSTRAINT [Nationality]  DEFAULT ('Ukrainian') FOR [Nationality]
+GO
+
+ALTER TABLE [dbo].[AUTHORS]  WITH CHECK ADD  CONSTRAINT [CHK_FirstName_AUTHORS] CHECK  (([FirstName] like '_%'))
+GO
+
+ALTER TABLE [dbo].[AUTHORS] CHECK CONSTRAINT [CHK_FirstName_AUTHORS]
+GO
+
+ALTER TABLE [dbo].[AUTHORS]  WITH CHECK ADD  CONSTRAINT [CHK_LastName_AUTHORS] CHECK  (([LastName] like '_%' AND [LastName] like N'%[А-Я,а-я,ї,Ї,і,І,'''',Є,є]'))
+GO
+
+ALTER TABLE [dbo].[AUTHORS] CHECK CONSTRAINT [CHK_LastName_AUTHORS]
+GO
+

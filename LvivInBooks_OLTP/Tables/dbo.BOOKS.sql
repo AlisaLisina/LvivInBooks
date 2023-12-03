@@ -1,0 +1,30 @@
+USE [LvivInBooks_OLTP]
+GO
+
+/****** Object:  Table [dbo].[BOOKS]    Script Date: 03.12.2023 16:01:56 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BOOKS](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Title] [nvarchar](100) NOT NULL,
+	[PubHouse] [nvarchar](200) NULL,
+	[Language] [nvarchar](200) NULL,
+	[Annotation] [nvarchar](max) NULL,
+	[Rating] [numeric](2, 1) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[BOOKS]  WITH CHECK ADD  CONSTRAINT [CHK_Rating] CHECK  (([Rating]>=(1) AND [Rating]<=(5)))
+GO
+
+ALTER TABLE [dbo].[BOOKS] CHECK CONSTRAINT [CHK_Rating]
+GO
+
